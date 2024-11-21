@@ -1,4 +1,4 @@
-Built the executable with the commands
+Built the executable with the commands in powershell on windows not in linux wsl
 
 `cd \\wsl.localhost\Ubuntu\home\cas\design_build\tip_calculator`
 
