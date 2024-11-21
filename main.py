@@ -2,11 +2,23 @@ import flet as ft
 
 def main(page: ft.Page):
     page.title = "Tip Calculator"
-    page.theme = ft.Theme(color_scheme_seed="green")
+    page.theme = ft.Theme(color_scheme_seed="deeppurple")
+    page.theme_mode = ft.ThemeMode.DARK
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     
     tip_percent_field = ft.TextField(value="0", text_align=ft.TextAlign.RIGHT, width=100)
     
+    def theme_changed(e):
+        page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
+        theme_icon.icon = "dark_mode" if page.theme_mode == ft.ThemeMode.LIGHT else "light_mode"
+        page.update()
+
+    theme_icon = ft.IconButton(
+        icon="light_mode",
+        tooltip="Toggle light/dark theme",
+        on_click=theme_changed,
+    )    
+
     def clear(e):
         tip_percent_field.value = "0"
         bill_field.value = ""
@@ -65,23 +77,71 @@ def main(page: ft.Page):
     )
 
     page.add(
-        ft.Row([ft.Text("Bill Amount")], alignment=ft.MainAxisAlignment.CENTER),
-        ft.Row([bill_field], alignment=ft.MainAxisAlignment.CENTER),
-        ft.Row(
-            [
-                ft.Text("Tip % "),
-                ft.IconButton(ft.icons.REMOVE, on_click=minus_click),
-                tip_percent_field,
-                ft.IconButton(ft.icons.ADD, on_click=plus_click),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-        ),
-        ft.Row([ft.Text("Tip Amount")], alignment=ft.MainAxisAlignment.CENTER),
-        ft.Row([tip_amount_field], alignment=ft.MainAxisAlignment.CENTER),
-        ft.Row([ft.Text("Total Bill Amount")], alignment=ft.MainAxisAlignment.CENTER),
-        ft.Row([total_amount_field], alignment=ft.MainAxisAlignment.CENTER),
-        ft.Row([ft.ElevatedButton(text="Generate New",on_click=clear)], alignment=ft.MainAxisAlignment.CENTER),
-        
+        ft.Container(
+            content=ft.Column(
+                [        
+                    ft.Container(
+                        content=ft.Column(
+                            [ft.Row([ft.Text("Bill Amount", size=30, weight=ft.FontWeight.BOLD,),], alignment=ft.MainAxisAlignment.CENTER),
+                            ft.Row([bill_field], alignment=ft.MainAxisAlignment.CENTER),]                        
+                        ),   
+                        bgcolor=ft.colors.INVERSE_PRIMARY,
+                        padding=20,
+                        border_radius=10,                        
+                    ),
+                    ft.Container(
+                        content=ft.Column([
+                            ft.Row(
+                                [
+                                    ft.Text("Tip % ", size=25, weight=ft.FontWeight.BOLD),
+                                    ft.IconButton(ft.icons.REMOVE, on_click=minus_click),
+                                    tip_percent_field,
+                                    ft.IconButton(ft.icons.ADD, on_click=plus_click),
+                                ],
+                                alignment=ft.MainAxisAlignment.CENTER,
+                            ),]
+                        ),
+                        bgcolor=ft.colors.INVERSE_PRIMARY,
+                        padding=20,
+                        border_radius=10,                        
+                    ),
+                    ft.Container(
+                        content=ft.Column(
+                            [
+                                ft.Row([ft.Text("Tip Amount",size=25, weight=ft.FontWeight.BOLD)], alignment=ft.MainAxisAlignment.CENTER),
+                                ft.Row([tip_amount_field], alignment=ft.MainAxisAlignment.CENTER),
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        bgcolor=ft.colors.INVERSE_PRIMARY,
+                        padding=20,
+                        border_radius=10,
+                    ),
+                    ft.Container(
+                        content=ft.Column(
+                            [
+                                ft.Row([ft.Text("Total Bill Amount",size=25, weight=ft.FontWeight.BOLD)], alignment=ft.MainAxisAlignment.CENTER),
+                                ft.Row([total_amount_field], alignment=ft.MainAxisAlignment.CENTER),
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        bgcolor=ft.colors.INVERSE_PRIMARY,
+                        padding=20,
+                        border_radius=10,
+                    ),
+
+
+                    ft.Row([ft.ElevatedButton(text="Generate New",on_click=clear)], alignment=ft.MainAxisAlignment.CENTER),
+                    ft.Row([theme_icon], alignment=ft.MainAxisAlignment.END),        
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            bgcolor=ft.colors.PRIMARY_CONTAINER,
+            padding=20,
+            border_radius=10,
+            width=400,
+            alignment=ft.alignment.center
+        )        
     )
 
 ft.app(main)
